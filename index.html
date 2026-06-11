@@ -64,8 +64,9 @@
   @media(max-width:620px){ .strip .wrap span.hide-s{display:none;} }
 
   /* header */
-  header{position:sticky; top:0; z-index:60; background:rgba(11,22,17,.6); backdrop-filter:saturate(150%) blur(14px); border-bottom:1px solid transparent; transition:border-color .4s, background .4s;}
-  header.solid{border-bottom-color:var(--line); background:rgba(11,22,17,.86);}
+  /* solid translucent bg instead of backdrop-filter — frosted blur re-rasterizes every scroll frame */
+  header{position:sticky; top:0; z-index:60; background:rgba(11,22,17,.78); border-bottom:1px solid transparent; transition:border-color .4s, background .4s;}
+  header.solid{border-bottom-color:var(--line); background:rgba(11,22,17,.92);}
   .nav-in{display:flex; align-items:center; justify-content:space-between; height:80px;}
   .brand{display:flex; align-items:center; gap:13px;}
   .brand img{height:38px; width:auto;}
@@ -85,9 +86,10 @@
   .orb.a{width:46vw;height:46vw; background:radial-gradient(circle,#28b277,transparent 62%); top:-14%; left:-6%; animation:drift1 28s ease-in-out infinite alternate;}
   .orb.b{width:38vw;height:38vw; background:radial-gradient(circle,#5fe3ad,transparent 60%); top:6%; right:-8%; animation:drift2 24s ease-in-out infinite alternate;}
   .orb.c{width:32vw;height:32vw; background:radial-gradient(circle,#1f7d8f,transparent 60%); bottom:-16%; left:34%; animation:drift3 32s ease-in-out infinite alternate;}
-  @keyframes drift1{to{transform:translate(16%,12%) scale(1.18);}}
-  @keyframes drift2{to{transform:translate(-14%,16%) scale(1.12);}}
-  @keyframes drift3{to{transform:translate(10%,-12%) scale(1.22);}}
+  /* translate-only (no scale) so the blurred orb layer never re-rasterizes — pure GPU transform */
+  @keyframes drift1{to{transform:translate(16%,12%);}}
+  @keyframes drift2{to{transform:translate(-14%,16%);}}
+  @keyframes drift3{to{transform:translate(10%,-12%);}}
   .hero::after{content:""; position:absolute; inset:0; z-index:1; pointer-events:none;
     background:radial-gradient(120% 80% at 50% 0%, transparent 50%, rgba(7,16,11,.6) 100%);}
   .hero-in{position:relative; z-index:2;}
