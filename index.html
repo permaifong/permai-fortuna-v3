@@ -80,16 +80,14 @@
 
   /* hero */
   .hero{position:relative; overflow:hidden; padding:120px 0 0;}
-  .aurora{position:absolute; inset:-25% -10% 0; z-index:0; pointer-events:none;}
-  /* orbs — no blend mode + lighter blur so each stays on its own cheap GPU layer; transform-only animation */
-  .orb{position:absolute; border-radius:50%; filter:blur(64px); opacity:.42; will-change:transform; transform:translateZ(0);}
-  .orb.a{width:46vw;height:46vw; background:radial-gradient(circle,#28b277,transparent 62%); top:-14%; left:-6%; animation:drift1 28s ease-in-out infinite alternate;}
-  .orb.b{width:38vw;height:38vw; background:radial-gradient(circle,#5fe3ad,transparent 60%); top:6%; right:-8%; animation:drift2 24s ease-in-out infinite alternate;}
-  .orb.c{width:32vw;height:32vw; background:radial-gradient(circle,#1f7d8f,transparent 60%); bottom:-16%; left:34%; animation:drift3 32s ease-in-out infinite alternate;}
-  /* translate-only (no scale) so the blurred orb layer never re-rasterizes — pure GPU transform */
-  @keyframes drift1{to{transform:translate(16%,12%);}}
-  @keyframes drift2{to{transform:translate(-14%,16%);}}
-  @keyframes drift3{to{transform:translate(10%,-12%);}}
+  /* aurora — static layered radial-gradient blooms. No blur filter, no animation:
+     animated large-radius blur saturates the GPU and drags the whole page. This is free after first paint. */
+  .aurora{position:absolute; inset:-25% -10% 0; z-index:0; pointer-events:none;
+    background:
+      radial-gradient(42vw 42vw at 8% 6%, rgba(40,178,119,.40), transparent 60%),
+      radial-gradient(36vw 36vw at 94% 16%, rgba(95,227,173,.34), transparent 62%),
+      radial-gradient(34vw 34vw at 48% 98%, rgba(31,125,143,.30), transparent 62%);
+  }
   .hero::after{content:""; position:absolute; inset:0; z-index:1; pointer-events:none;
     background:radial-gradient(120% 80% at 50% 0%, transparent 50%, rgba(7,16,11,.6) 100%);}
   .hero-in{position:relative; z-index:2;}
@@ -257,9 +255,7 @@
 
   <!-- hero -->
   <section class="hero" id="top">
-    <div class="aurora">
-      <div class="orb a"></div><div class="orb b"></div><div class="orb c"></div>
-    </div>
+    <div class="aurora"></div>
     <div class="hero-in">
       <div class="wrap">
         <div class="hero-copy">
